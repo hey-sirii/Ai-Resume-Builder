@@ -1,115 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div class="container">
-      <div class="panel">
-        <h1>AI Resume Builder</h1>
-        <p class="subtitle">Powered by Google Gemini API</p>
 
-        <div class="api-key-group">
-          <label for="apiKey">Gemini API Key *</label>
-          <input
-            type="password"
-            id="apiKey"
-            value="AIzaSyAcPB1zmrnoRFB1YRpTLdzRJ8W9wWZNqPw"
-            placeholder="Enter your Gemini API key"
-          />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexCV - Resume, Cover Letter & Portfolio Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- Header -->
+        <div class="app-header fade-in">
+            <h1>Apex CV AI</h1>
+            <p>Generate professional resumes, cover letters, and portfolios with AI</p>
         </div>
 
-        <div class="form-group">
-          <label for="resumeType">Resume Type</label>
-          <select id="resumeType">
-            <option value="software">Software Engineer</option>
-            <option value="data">Data Scientist</option>
-            <option value="product">Product Manager</option>
-            <option value="marketing">Marketing Manager</option>
-            <option value="designer">UI/UX Designer</option>
-          </select>
+        <!-- Progress Bar -->
+        <div class="progress-section fade-in">
+            <div class="progress-header">
+                <span class="progress-label" id="step-label">Step 1 of 6: Basic Information</span>
+                <span class="progress-percentage" id="step-percentage">16%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar" style="width: 16%"></div>
+            </div>
         </div>
 
-        <div class="form-group">
-          <label for="personalInfo">Personal Information</label>
-          <textarea
-            id="personalInfo"
-            placeholder="Name, email, phone, LinkedIn, GitHub, location, etc."
-          ></textarea>
+        <!-- Form Card -->
+        <div class="form-card fade-in">
+
+            <!-- Step 1: Basic Information -->
+            <div class="step-content" id="step-1">
+                <h2 class="step-title">Basic Information</h2>
+                <div class="form-fields">
+                    <div>
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="name" placeholder="e.g., Jane Doe" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="email" placeholder="e.g., jane.doe@email.com" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="e.g., +1 (555) 123-4567" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">LinkedIn Profile</label>
+                        <input type="url" id="linkedin" placeholder="e.g., linkedin.com/in/janedoe" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">GitHub Profile</label>
+                        <input type="url" id="github" placeholder="e.g., github.com/janedoe" class="form-input">
+                    </div>
+                </div>
+                <div class="step-nav">
+                    <button onclick="nextStep()" class="btn btn-next">Next Step →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Education -->
+            <div class="step-content hidden" id="step-2">
+                <h2 class="step-title">Education</h2>
+                <div id="education-container"></div>
+                <button onclick="addEducation()" class="btn btn-add">+ Add Education</button>
+                <div class="step-nav-between">
+                    <button onclick="prevStep()" class="btn btn-back">← Back</button>
+                    <button onclick="nextStep()" class="btn btn-next">Next Step →</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Work Experience -->
+            <div class="step-content hidden" id="step-3">
+                <h2 class="step-title">Work Experience</h2>
+                <div id="experience-container"></div>
+                <button onclick="addExperience()" class="btn btn-add">+ Add Experience</button>
+                <div class="step-nav-between">
+                    <button onclick="prevStep()" class="btn btn-back">← Back</button>
+                    <button onclick="nextStep()" class="btn btn-next">Next Step →</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Projects -->
+            <div class="step-content hidden" id="step-4">
+                <h2 class="step-title">Projects</h2>
+                <div id="projects-container"></div>
+                <button onclick="addProject()" class="btn btn-add">+ Add Project</button>
+                <div class="step-nav-between">
+                    <button onclick="prevStep()" class="btn btn-back">← Back</button>
+                    <button onclick="nextStep()" class="btn btn-next">Next Step →</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Skills -->
+            <div class="step-content hidden" id="step-5">
+                <h2 class="step-title">Skills</h2>
+                <div>
+                    <label class="form-label">Enter your skills (comma-separated)</label>
+                    <textarea id="skills" rows="6"
+                        placeholder="e.g., Python, JavaScript, React, Node.js, SQL, Machine Learning, Public Speaking, Project Management"
+                        class="form-textarea"></textarea>
+                </div>
+                <div class="step-nav-between">
+                    <button onclick="prevStep()" class="btn btn-back">← Back</button>
+                    <button onclick="nextStep()" class="btn btn-next">Next Step →</button>
+                </div>
+            </div>
+
+            <!-- Step 6: Generation Hub -->
+            <div class="step-content hidden" id="step-6">
+                <h2 class="step-title">Generation Hub</h2>
+                <div class="job-desc-section">
+                    <label class="form-label">Target Job Description (Optional but Recommended)</label>
+                    <textarea id="job-description" rows="8"
+                        placeholder="Paste the job description here to tailor your resume and cover letter..."
+                        class="form-textarea"></textarea>
+                </div>
+                <div class="gen-hub-grid">
+                    <button onclick="generateContent('resume')" class="gen-hub-card">
+                        <div class="icon">📄</div>
+                        <div class="label">Generate Resume</div>
+                    </button>
+                    <button onclick="generateContent('cover-letter')" class="gen-hub-card">
+                        <div class="icon">✉️</div>
+                        <div class="label">Generate Cover Letter</div>
+                    </button>
+                    <button onclick="generateContent('portfolio')" class="gen-hub-card">
+                        <div class="icon">🌐</div>
+                        <div class="label">Generate Portfolio</div>
+                    </button>
+                </div>
+                <div class="step-nav-start">
+                    <button onclick="prevStep()" class="btn btn-back">← Back</button>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-          <label for="education">Education Background</label>
-          <textarea
-            id="education"
-            placeholder="University name, degree, major, graduation date, GPA (optional), relevant coursework"
-          ></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="experience">Work Experience</label>
-          <textarea
-            id="experience"
-            placeholder="Company names, job titles, dates, responsibilities, and achievements. Include internships and full-time roles."
-          ></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="projects">Projects</label>
-          <textarea
-            id="projects"
-            placeholder="Project names, technologies used, descriptions, and key accomplishments"
-          ></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="skills">Technical Skills</label>
-          <textarea
-            id="skills"
-            placeholder="Programming languages, frameworks, tools, technologies"
-          ></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="extracurricular"
-            >Leadership / Extracurricular (Optional)</label
-          >
-          <textarea
-            id="extracurricular"
-            placeholder="Leadership roles, clubs, volunteer work, achievements"
-          ></textarea>
-        </div>
-
-        <button class="btn" id="generateBtn">Generate Resume with AI</button>
-
-        <div class="loading" id="loading">
-          <div class="spinner"></div>
-          <p>Generating your professional resume...</p>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h1>Resume Preview</h1>
-
-        <div id="resumePreview">
-          <p style="text-align: center; color: #999; margin-top: 100px">
-            Fill out the form and click "Generate Resume with AI" to see your
-            professional resume here.
-          </p>
-        </div>
-
-        <div class="action-buttons">
-          <button class="btn btn-secondary" id="downloadBtn" style="flex: 1">
-            Download PDF
-          </button>
-          <button class="btn" id="copyBtn" style="flex: 1">Copy HTML</button>
-        </div>
-      </div>
     </div>
 
-    <script src="script.js?v=3"></script>
-  </body>
+    <!-- Loading Modal -->
+    <div id="loading-modal" class="modal-overlay">
+        <div class="modal-box" style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">
+                <h3>Generating with AI...</h3>
+                <p>This may take a few moments</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Output Modal -->
+    <div id="output-modal" class="modal-overlay">
+        <div class="modal-box-large">
+            <div class="modal-header">
+                <h3 id="output-title">Generated Content</h3>
+            </div>
+            <div class="modal-body">
+                <div id="output-content" class="output-content"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeOutputModal()" class="btn btn-cancel">Close</button>
+                <button onclick="copyToClipboard()" class="btn btn-copy">Copy to Clipboard</button>
+                <button onclick="saveAsFile()" class="btn btn-download">Save as File</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
 </html>
